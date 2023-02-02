@@ -5,7 +5,8 @@ let _error = document.querySelector('#error-empty');
 
 renderTasks(tasks)
 
-btnAdd.addEventListener('click',function(){
+
+function inputData(){
     if (!taskElement.value){
         if( _error.classList.contains('notify'))
             _error.classList.remove('notify');
@@ -16,14 +17,14 @@ btnAdd.addEventListener('click',function(){
         }, 1500);
         return false;
     }
-    let taskId = this.getAttribute('id');
+    let taskId = btnAdd.getAttribute('id');
     let task = { name: taskElement.value,
                  status: 'unDone' } ;
     let tasks =  getTaskFromLocalStorage();
 
     if(taskId === 0 || taskId){
         tasks[taskId] = task;
-        this.removeAttribute('id'); 
+        btnAdd.removeAttribute('id'); 
         btnAdd.innerHTML='ADD'
     }
     else
@@ -34,9 +35,15 @@ btnAdd.addEventListener('click',function(){
 
     localStorage.setItem('tasks',JSON.stringify(tasks));
     renderTasks(tasks);
-})
+}
 
-//edit takss
+//Hàm bắt sự kiện enter
+taskElement.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    inputData();
+  }
+});
+
 function editTasks(id){
     let tasks = getTaskFromLocalStorage();
     if(tasks.length > 0){
